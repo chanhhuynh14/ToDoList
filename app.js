@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const { redirect } = require("express/lib/response");
 
 var items = [];
 const app = express();
@@ -61,7 +62,17 @@ app.post("/",function(req,res){
     item.save();
     res.redirect("/");
 });
-
+app.post("/delete",function(req,res){  
+    const checkedItemId = req.body.checkbox;
+    Item.findByIdAndRemove(checkedItemId,function(err){
+        if(!err) 
+        {
+            console.log("Deleted checked item.");
+            res.redirect("/");
+        }
+        else console.log(err);
+    })
+});
 app.listen(3000,function(){
     console.log("Server started on port 3000");
 });
