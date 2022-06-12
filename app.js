@@ -25,33 +25,40 @@ const itemsSchema = {
 };
 const Item = mongoose.model("Item", itemsSchema)
 
-const item1 = new Item({
-    name: "Chanh"
-});
+// const item1 = new Item({
+//     name: "Chanh"
+// });
 
-const item2 = new Item({
-    name: "Chan"
-});
-const item3 = new Item({
-    name: "Luong"
-});
+// const item2 = new Item({
+//     name: "Chan"
+// });
+// const item3 = new Item({
+//     name: "Luong"
+// });
 
-const defaultItems = [item1,item2,item3];
-Item.insertMany(defaultItems,function(err){
-    if(err) console.log(err);
-    else console.log("saved to db")
-})
-
+//const defaultItems = [item1,item2,item3];
 
 app.get("/",function(req,res){ 
     Item.find({}, function(err,foundItems){
-        res.render("list",{listTitle:"Today", newListItems:foundItems})
-    });
+        if(foundItems.length === 0){
+            Item.insertMany(defaultItems,function(err){
+                if(err) console.log(err);
+                else console.log("saved to db")
+            });
+            res.redirect("/");
+        }
+        else{
+            res.render("list",{listTitle:"Today", newListItems:foundItems})
+        }
+    }); 
 });
 
 app.post("/",function(req,res){  
-    var item =  req.body.newItem;
-    items.push(item);
+    var itemName =  req.body.newItem;
+    const item = new Item({
+        name : itemName
+    });
+    item.save();
     res.redirect("/");
 });
 
