@@ -25,20 +25,7 @@ const itemsSchema = {
     name : String
 };
 const Item = mongoose.model("Item", itemsSchema)
-
-// const item1 = new Item({
-//     name: "Chanh"
-// });
-
-// const item2 = new Item({
-//     name: "Chan"
-// });
-// const item3 = new Item({
-//     name: "Luong"
-// });
-
-//const defaultItems = [item1,item2,item3];
-
+  
 app.get("/",function(req,res){ 
     Item.find({}, function(err,foundItems){
         if(foundItems.length === 0){
